@@ -72,6 +72,9 @@
     <Reference Include="Microsoft.Graph, Version=3.19.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Graph.3.19.0\lib\net461\Microsoft.Graph.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Graph.Auth, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.Graph.Auth.1.0.0-preview.5\lib\net45\Microsoft.Graph.Auth.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Graph.Core, Version=1.22.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Graph.Core.1.22.0\lib\net45\Microsoft.Graph.Core.dll</HintPath>
     </Reference>

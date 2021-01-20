@@ -7,9 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using log4net;
 using Microsoft.Graph;
+using Microsoft.Graph.Auth;
 using Microsoft.Identity.Client;
 using Microsoft.SharePoint.Client;
 using Microsoft.SharePoint.Client.UserProfiles;
+using Newtonsoft.Json;
 using Quartz;
 using SyncUserProfilesToListContatos;
 using List = Microsoft.SharePoint.Client.List;
@@ -27,6 +29,7 @@ namespace SyncUserProfilesToListContatos
         
         private readonly ILog _log;
         private readonly Configuration _configuration;
+        private string PICTURE_URL= "_layouts/15/userphoto.aspx?size=M&accountname=";
 
         public SharepointSyncJob(ILog log, IConfigurationProvider configurationProvider)
         {
@@ -37,8 +40,6 @@ namespace SyncUserProfilesToListContatos
         }
         private void Init()
         {
-           //var Users=  GetAllUsers();
-           // Users.Wait();
             _log.Info("Início do processo: SharepointSyncJob");
             var listItemListaTelefonicaProperties = new List<ItemListaTelefonicaProperties>();
             using (ClientContext tenantContext = new ClientContext(_configuration.TenantUrl))
@@ -63,9 +64,19 @@ namespace SyncUserProfilesToListContatos
                     UserProfileProperties.CellPhone,
                     UserProfileProperties.PictureURL,
                     UserProfileProperties.Office,
-                    UserProfileProperties.Fax,
+                    UserProfileProperties.IpPhone,
                     UserProfileProperties.WorkPhone,
-                     UserProfileProperties.IpPhone,
+                    UserProfileProperties.IpPhone,
+                    UserProfileProperties.AboutMe,
+                    UserProfileProperties.StreetAddress,
+                    UserProfileProperties.CityAddress,
+                    UserProfileProperties.StateAddress,
+                    UserProfileProperties.ZIPAddress,
+                    UserProfileProperties.CountryAddress,
+                    UserProfileProperties.SPS_Location,
+                     UserProfileProperties.Title,
+                     UserProfileProperties.Fax,
+                       UserProfileProperties.AccountName,
                 };
 
                 foreach (string propertyKey in userProfileProperties)
@@ -97,11 +108,21 @@ namespace SyncUserProfilesToListContatos
                             itemListaTelefonicaProperties.Pager = listProfileProperties[4];
                             itemListaTelefonicaProperties.Department = listProfileProperties[5];
                             itemListaTelefonicaProperties.CellPhone = listProfileProperties[6];
-                            itemListaTelefonicaProperties.PictureURL = listProfileProperties[7];
-                            itemListaTelefonicaProperties.Office = listProfileProperties[8];
+                             itemListaTelefonicaProperties.Office = listProfileProperties[8];
                             itemListaTelefonicaProperties.WorkFax = listProfileProperties[9];
                             itemListaTelefonicaProperties.WorkPhone = listProfileProperties[10];
                             itemListaTelefonicaProperties.IpPhone = listProfileProperties[11];
+                            itemListaTelefonicaProperties.AboutMe = listProfileProperties[12];
+                            itemListaTelefonicaProperties.WorkAddress = listProfileProperties[13];
+                            itemListaTelefonicaProperties.WorkCity = listProfileProperties[14];
+                            itemListaTelefonicaProperties.WorkState = listProfileProperties[15];
+                            itemListaTelefonicaProperties.WorkZip = listProfileProperties[16];
+                            itemListaTelefonicaProperties.WorkCountry = listProfileProperties[17];
+                            itemListaTelefonicaProperties.Company = listProfileProperties[18];
+                            itemListaTelefonicaProperties.JobTitle = listProfileProperties[19];
+                            itemListaTelefonicaProperties.WorkFax = listProfileProperties[20];
+                            itemListaTelefonicaProperties.PictureURL = $"{this._configuration.TenantUrl}{PICTURE_URL}{ user.Email}";
+
                             listItemListaTelefonicaProperties.Add(itemListaTelefonicaProperties);
                         }
                     }
@@ -140,12 +161,12 @@ namespace SyncUserProfilesToListContatos
                                 var id = GetIdByTitle(itemListaTelefonicaProperties.PreferredName);
                                 if (id == null)
                                 {
-                                    _log.Info($"Criar novo contato -> CreateNovoContacto no processo: SharepointSyncJob, Valor: {itemListaTelefonicaProperties}");
+                                    _log.Info($"Criar novo contato -> CreateNovoContacto no processo: SharepointSyncJob, Valor: { JsonConvert.SerializeObject(itemListaTelefonicaProperties)}");
                                     CreateNovoContacto(siteContexto, listaTelefonica, itemListaTelefonicaProperties);
                                 }
                                 else
                                 {
-                                    _log.Info($"Update Contacto -> UpdateContacto no processo: SharepointSyncJob, Valor: {itemListaTelefonicaProperties}");
+                                    _log.Info($"Update Contacto -> UpdateContacto no processo: SharepointSyncJob, Valor: {JsonConvert.SerializeObject(itemListaTelefonicaProperties)}");
                                     UpdateContacto(siteContexto, listaTelefonica, itemListaTelefonicaProperties, id.Value);
                                 }
 
@@ -186,6 +207,9 @@ namespace SyncUserProfilesToListContatos
                 updateItem["WorkZip"] = itemListaTelefonicaProperties.WorkZip;
                 updateItem["IpPhone"] = itemListaTelefonicaProperties.IpPhone;
                 updateItem["WorkAddress"] = itemListaTelefonicaProperties.WorkAddress;
+                updateItem["AboutMe"] = itemListaTelefonicaProperties.AboutMe;
+                updateItem["JobTitle"] = itemListaTelefonicaProperties.JobTitle;
+                updateItem["Company"] = itemListaTelefonicaProperties.Company;
                 updateItem.Update();
                 siteContexto.ExecuteQuery();
             }
@@ -265,7 +289,6 @@ namespace SyncUserProfilesToListContatos
                 addItem["PictureURL"] = itemListaTelefonicaProperties.PictureURL;
                 addItem["Office"] = itemListaTelefonicaProperties.Office;
                 addItem["WorkFax"] = itemListaTelefonicaProperties.WorkFax;
-                addItem["WorkFax"] = itemListaTelefonicaProperties.WorkFax;
                 addItem["WorkPhone"] = itemListaTelefonicaProperties.WorkPhone;
                 addItem["WorkState"] = itemListaTelefonicaProperties.WorkState;
                 addItem["WorkCity"] = itemListaTelefonicaProperties.WorkCity;
@@ -273,6 +296,9 @@ namespace SyncUserProfilesToListContatos
                 addItem["WorkZip"] = itemListaTelefonicaProperties.WorkZip;
                 addItem["IpPhone"] = itemListaTelefonicaProperties.IpPhone;
                 addItem["WorkAddress"] = itemListaTelefonicaProperties.WorkAddress;
+                addItem["AboutMe"] = itemListaTelefonicaProperties.AboutMe;
+                addItem["JobTitle"] = itemListaTelefonicaProperties.JobTitle;
+                addItem["Company"] = itemListaTelefonicaProperties.Company;
                 addItem.Update();
                 siteContexto.ExecuteQuery();
             }

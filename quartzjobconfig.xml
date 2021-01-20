@@ -16,19 +16,7 @@
       <durable>true</durable>
       <recover>false</recover>
     </job>
-    <trigger>
-      <simple>
-        <name>SharepointSyncTrigger</name>
-        <group>SharepointSyncGroup</group>
-        <description>Job Sync Lista Telefonica in Sharepoint List</description>
-        <job-name>SharepointSyncJob</job-name>
-        <job-group>SharepointSyncJobGroup</job-group>
-        <misfire-instruction>SmartPolicy</misfire-instruction>
-        <repeat-count>-1</repeat-count>
-        <repeat-interval>50000</repeat-interval>
-      </simple>
-    </trigger>
-    <!--<trigger>
+   <trigger>
       <cron>
         <name>cronSharepointSyncJob</name>
         <group>cronSharepointSyncJob</group>
@@ -37,6 +25,6 @@
         <job-group>SharepointSyncJobGroup</job-group>
         <cron-expression>0 0 12 * * ?</cron-expression>
       </cron>
-    </trigger>-->
+    </trigger>
   </schedule>
 </job-scheduling-data>

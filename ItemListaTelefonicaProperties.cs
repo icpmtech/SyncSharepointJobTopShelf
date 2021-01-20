@@ -10,6 +10,7 @@
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Company { get; set; }
+        public string Description { get; set; }
         public string CompanyPhonetic { get; set; }
         public string JobTitle { get; set; }
         public string BusinessPhone { get; set; }
@@ -28,6 +29,7 @@
         public string PictureURL { get; internal set; }
         public string Office { get; internal set; }
         public string IpPhone { get; internal set; }
-        public object WorkAddress { get; internal set; }
+        public string WorkAddress { get; internal set; }
+        public string AboutMe { get; internal set; }
     }
 }

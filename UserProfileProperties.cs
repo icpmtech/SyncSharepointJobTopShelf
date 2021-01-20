@@ -96,7 +96,12 @@
         public const string SPS_RegionalSettings_Initialized = "SPS-RegionalSettings-Initialized ";
         public const string OfficeGraphEnabled = "OfficeGraphEnabled";
         public const string Pager = "Pager";
-        public const string IpPhone = "Fax";
-       
+        public const string IpPhone = "IPPhone";
+        public const string StreetAddress = "StreetAddress";
+        public const string CityAddress = "CityAddress";
+        public const string StateAddress = "StateAddress";
+        public const string ZIPAddress = "ZipAddress";
+        public const string CountryAddress = "CountryAddress";
+
     }
 }
